@@ -33,10 +33,14 @@ public class Task {
     private LocalDateTime createdAt;
     private LocalDateTime finishedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Task() {
     }
 
-    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, LocalDateTime createdAt, LocalDateTime finishedAt) {
+    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, LocalDateTime createdAt, LocalDateTime finishedAt, User user) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -44,6 +48,7 @@ public class Task {
         this.priority = priority;
         this.createdAt = createdAt;
         this.finishedAt = finishedAt;
+        this.user = user;
     }
 
 
@@ -101,5 +106,13 @@ public class Task {
 
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
