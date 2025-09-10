@@ -1,11 +1,15 @@
 package com.essjr.MeuGestorDeTarefas.dtos;
 
+import com.essjr.MeuGestorDeTarefas.models.enuns.TaskPriority;
+import com.essjr.MeuGestorDeTarefas.models.enuns.TaskStatus;
+
 import java.time.LocalDateTime;
 
-public record TaskDTO(String title,
+public record TaskDTO(Long id,
+                      String title,
                       String description,
-                      String status,
-                      String priority,
+                      TaskStatus status,
+                      TaskPriority priority,
                       LocalDateTime createdAt,
                       LocalDateTime updatedAt,
                       LocalDateTime finishedAt,

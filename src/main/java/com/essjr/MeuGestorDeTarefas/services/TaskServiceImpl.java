@@ -66,8 +66,8 @@ public class TaskServiceImpl implements TaskService{
 
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
-        task.setPriority(TaskPriority.valueOf(taskDTO.priority()));
-        task.setStatus(TaskStatus.valueOf(taskDTO.status()));
+        task.setPriority(TaskPriority.valueOf(String.valueOf(taskDTO.priority())));
+        task.setStatus(TaskStatus.valueOf(String.valueOf(taskDTO.status())));
 
         Task updatedTask = taskRepository.save(task);
 
