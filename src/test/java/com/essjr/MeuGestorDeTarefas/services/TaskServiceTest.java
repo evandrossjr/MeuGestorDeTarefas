@@ -1,9 +1,12 @@
 package com.essjr.MeuGestorDeTarefas.services;
 
 
+import com.essjr.MeuGestorDeTarefas.dtos.TaskDTO;
+import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
 import com.essjr.MeuGestorDeTarefas.models.Task;
 import com.essjr.MeuGestorDeTarefas.models.User;
 import com.essjr.MeuGestorDeTarefas.repositories.TaskRepository;
+import com.essjr.MeuGestorDeTarefas.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,12 +26,17 @@ public class TaskServiceTest {
     @Mock // utilizado para criar um objeto falso do TaskRepository
     private TaskRepository taskRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks // utilizado para criar uma instância real do TaskServiceIMpl injetando os mocks nela
     private TaskServiceImpl taskService;
 
 
     private User user;
+    private UserDTO userDTO;
     private Task task;
+    private TaskDTO taskDTO;
 
     @BeforeEach
         // o metodo roda antes de cada teste

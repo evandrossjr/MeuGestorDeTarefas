@@ -31,6 +31,7 @@ public class Task {
     private TaskPriority priority;
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private LocalDateTime finishedAt;
 
     @ManyToOne
@@ -40,15 +41,44 @@ public class Task {
     public Task() {
     }
 
-    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, LocalDateTime createdAt, LocalDateTime finishedAt, User user) {
+    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority,  User user) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
         this.priority = priority;
-        this.createdAt = createdAt;
-        this.finishedAt = finishedAt;
         this.user = user;
+    }
+
+    public Task(String title, String description, TaskStatus status, TaskPriority priority, User user) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.user = user;
+    }
+
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+
+        if (this.status == TaskStatus.DONE && this.finishedAt == null){
+            this.finishedAt = LocalDateTime.now();
+        }
+    }
+
+    public void finish(){
+        if (this.finishedAt == null){
+            this.status = TaskStatus.DONE;
+            this.finishedAt = LocalDateTime.now();
+        }
     }
 
 
@@ -98,6 +128,14 @@ public class Task {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public LocalDateTime getFinishedAt() {
