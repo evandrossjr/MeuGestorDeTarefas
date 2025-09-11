@@ -143,6 +143,94 @@ public class TaskServiceTest {
         // Garante que o taskRepository.save NUNCA foi chamado se o usuário não existe.
         verify(taskRepository, never()).save(any(Task.class));
     }
+
+    @Test
+    @DisplayName("Deve atualizar uma tarefa com sucesso quando o usuário é o dono")
+    void updateTask_whenUserIsOwner_shouldSucceed() {
+        // Cenário (Given)
+        TaskDTO updateRequestDTO = new TaskDTO(
+                task.getId(),
+                "Título Atualizado",
+                "Descrição Atualizada",
+                TaskStatus.DOING,
+                TaskPriority.MEDIUM,
+                null, null, null,
+                user.getId().toString()
+        );
+
+        // Quando o repositório buscar a tarefa, encontre-a.
+        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
+        // Quando o repositório salvar a tarefa, apenas retorne a mesma.
+        when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+
+        // Ação (When)
+        TaskDTO result = taskService.updateTask(task.getId(), updateRequestDTO, userDTO);
+
+        // Verificação (Then)
+        assertThat(result).isNotNull();
+        assertThat(result.title()).isEqualTo("Título Atualizado");
+        assertThat(result.status()).isEqualTo(TaskStatus.DOING);
+        verify(taskRepository, times(1)).findById(task.getId());
+        verify(taskRepository, times(1)).save(any(Task.class));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao tentar atualizar uma tarefa de outro usuário")
+    void updateTask_whenUserIsNotOwner_shouldThrowException() {
+        // Cenário (Given)
+        UserDTO anotherUserDTO = new UserDTO(99L, "Usuário Intruso", "intruso@email.com", UserRole.REGULAR);
+        TaskDTO updateRequestDTO = new TaskDTO(null, "Título Malicioso", null, null, null, null, null, null, null);
+
+        // O repositório encontra a tarefa, que pertence ao 'user' de ID 1.
+        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
+
+        // Ação e Verificação (When & Then)
+        // O usuário de ID 99L tenta atualizar a tarefa do usuário de ID 1.
+        assertThrows(ResourceNotFoundException.class, () -> {
+            taskService.updateTask(task.getId(), updateRequestDTO, anotherUserDTO);
+        });
+
+        // Garante que o método save NUNCA foi chamado.
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
+    @Test
+    @DisplayName("Deve finalizar uma tarefa com sucesso quando ela não está finalizada")
+    void finishTask_whenTaskIsNotFinished_shouldSucceed() {
+        // Cenário (Given)
+        // Garante que a tarefa não está finalizada.
+        task.setFinishedAt(null);
+        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Ação (When)
+        TaskDTO result = taskService.finishTask(task.getId(), userDTO);
+
+        // Verificação (Then)
+        assertThat(result).isNotNull();
+        assertThat(result.status()).isEqualTo(TaskStatus.DONE);
+        assertThat(result.finishedAt()).isNotNull();
+        verify(taskRepository, times(1)).save(any(Task.class));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao tentar finalizar uma tarefa já finalizada")
+    void finishTask_whenTaskIsAlreadyFinished_shouldThrowException() {
+        // Cenário (Given)
+        // A tarefa já está finalizada.
+        task.setFinishedAt(LocalDateTime.now().minusDays(1));
+        task.setStatus(TaskStatus.DONE);
+        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
+
+        // Ação e Verificação (When & Then)
+        assertThrows(IllegalStateException.class, () -> {
+            taskService.finishTask(task.getId(), userDTO);
+        });
+
+        // Garante que o método save NUNCA foi chamado.
+        verify(taskRepository, never()).save(any(Task.class));
+    }
 }
 
 

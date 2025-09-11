@@ -68,14 +68,10 @@ public class Task {
     @PreUpdate
     protected void onUpdate(){
         this.updatedAt = LocalDateTime.now();
-
-        if (this.status == TaskStatus.DONE && this.finishedAt == null){
-            this.finishedAt = LocalDateTime.now();
-        }
     }
 
     public void finish(){
-        if (this.finishedAt == null){
+        if (this.status != TaskStatus.DONE) {
             this.status = TaskStatus.DONE;
             this.finishedAt = LocalDateTime.now();
         }

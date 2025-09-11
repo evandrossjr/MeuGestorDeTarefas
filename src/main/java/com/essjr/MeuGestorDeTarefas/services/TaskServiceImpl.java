@@ -58,11 +58,19 @@ public class TaskServiceImpl implements TaskService{
         return Optional.of(TaskMapper.toDTO(task));
     }
 
+    // MÉTODO HELPER PRIVADO PARA VERIFICAÇÃO DE SEGURANÇA
+    private Task findTaskByIdAndUser(Long taskId, Long userId) {
+        return taskRepository.findById(taskId)
+                .filter(task -> task.getUser().getId().equals(userId))
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + taskId));
+    }
+
+
     @Transactional
     @Override
     public TaskDTO updateTask(Long id, TaskDTO taskDTO, UserDTO userDTO) {
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+        Task task = findTaskByIdAndUser(id, userDTO.id());
+
 
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
@@ -79,12 +87,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskDTO finishTask(Long id, UserDTO userDTO) {
 
-        Task task = taskRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Task not found with id: " + id));
-
-        if (!task.getUser().getId().equals(userDTO.id())) {
-            throw new ResourceNotFoundException("Task not found with id: " + id);
-        }
+        Task task = findTaskByIdAndUser(id, userDTO.id());
 
         if (task.getFinishedAt() != null) {
             throw new IllegalStateException("Task already finished at: " + task.getFinishedAt());
