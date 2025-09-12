@@ -22,8 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -79,6 +78,44 @@ class TaskControllerTest {
                 .andExpect(status().isOk()) // Espera que o status HTTP seja 200 (OK)
                 .andExpect(jsonPath("$.id").value(10L))
                 .andExpect(jsonPath("$.title").value("Test API"));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma tarefa e retornar status 200 OK")
+    void updateTask_withValidData_shouldReturnOk() throws Exception {
+        // Cenário (Given)
+        Long taskId = 10L;
+        TaskDTO updateRequest = new TaskDTO(null, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null, null);
+        TaskDTO updatedTaskDTO = new TaskDTO(taskId, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null, "1");
+
+        // Quando o serviço de atualização for chamado, retorne o DTO atualizado.
+        when(taskService.updateTask(eq(taskId), any(TaskDTO.class), any(UserDTO.class))).thenReturn(updatedTaskDTO);
+
+        // Ação e Verificação (When & Then)
+        mockMvc.perform(put("/api/tasks/{id}", taskId) // Faz um PUT para /api/tasks/10
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isOk()) // Espera 200 OK
+                .andExpect(jsonPath("$.title").value("Título Atualizado"))
+                .andExpect(jsonPath("$.status").value("DOING"));
+    }
+
+    @Test
+    @DisplayName("Deve finalizar uma tarefa e retornar status 200 OK")
+    void finishTask_whenTaskExists_shouldReturnOk() throws Exception {
+        // Cenário (Given)
+        Long taskId = 10L;
+        // O DTO retornado pelo serviço terá o status DONE e uma data de finalização.
+        TaskDTO finishedTaskDTO = new TaskDTO(taskId, "Test API", "Description", TaskStatus.DONE, TaskPriority.HIGH, null, null, java.time.LocalDateTime.now(), "1");
+
+        when(taskService.finishTask(eq(taskId), any(UserDTO.class))).thenReturn(finishedTaskDTO);
+
+        // Ação e Verificação (When & Then)
+        // Usamos PATCH pois é uma atualização parcial (apenas o status e datas).
+        mockMvc.perform(patch("/api/tasks/{id}/finish", taskId)) // Faz um PATCH para /api/tasks/10/finish
+                .andExpect(status().isOk()) // Espera 200 OK
+                .andExpect(jsonPath("$.status").value("DONE"))
+                .andExpect(jsonPath("$.finishedAt").exists()); // Verifica se o campo finishedAt foi preenchido
     }
 
 }
