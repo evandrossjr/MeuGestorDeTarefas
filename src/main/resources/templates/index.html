@@ -11,8 +11,9 @@
 
 <div class="container">
     <header>
-        <h1>Minhas Tarefas</h1>
+        <h1>Minhas Tarefas - <span th:text="${user.name}">Nome do Usuário</span></h1>
     </header>
+
 
     <main>
         <div class="add-task-form">
@@ -23,6 +24,38 @@
 
         <div class="task-list">
             <h2>Lista de Tarefas</h2>
+
+            <div th:if="${#lists.isEmpty(tasks)}">
+                <p>Você ainda não tem tarefas cadastradas. Que tal adicionar uma?</p>
+            </div>
+
+            <table th:if="${not #lists.isEmpty(tasks)}" class="task-table">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Prioridade</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${tasks}">
+                    <td th:text="${task.title}">Título da Tarefa...</td>
+                    <td th:text="${task.priority}">ALTA</td>
+                    <td>
+                    <span th:text="${task.status}"
+                          th:classappend="${task.status.name() == 'DONE' ? 'status-done' : 'status-pending'}"
+                          class="status-badge">
+                        A FAZER
+                    </span>
+                    </td>
+                    <td>
+                        <a href="#" class="btn-action btn-edit">Editar</a>
+                        <a href="#" class="btn-action btn-delete">Excluir</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </main>
 

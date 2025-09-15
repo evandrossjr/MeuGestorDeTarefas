@@ -19,8 +19,7 @@ public class TaskMapper {
                 task.getPriority(),
                 task.getCreatedAt(),
                 task.getUpdatedAt(),
-                task.getFinishedAt(),
-                task.getUser().getId().toString()
+                task.getFinishedAt()
         );
     }
 
@@ -33,7 +32,9 @@ public class TaskMapper {
         task.setId(taskDTO.id());
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
-        task.setStatus(TaskStatus.valueOf(String.valueOf(taskDTO.status())));
+        if (taskDTO.status() != null) {
+            task.setStatus(taskDTO.status());
+        }
         task.setPriority(TaskPriority.valueOf(String.valueOf(taskDTO.priority())));
         return task;
     }

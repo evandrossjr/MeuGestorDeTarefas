@@ -5,6 +5,7 @@ import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
 import com.essjr.MeuGestorDeTarefas.models.Task;
 import com.essjr.MeuGestorDeTarefas.models.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
@@ -23,6 +24,13 @@ public interface TaskService {
      * @return Um Optional contendo a tarefa se encontrada e pertencente ao usuário, caso contrário, um Optional vazio.
      */
     Optional<TaskDTO> findTaskById(Long id, UserDTO userDTO);
+
+    /**
+     * Busca todas as tarefas associadas ao usuário
+     * @param userDTO o usuário dono das tarefas
+     * @return Uma lista de DTOs das tarefas encontradas
+     */
+    List<TaskDTO> findAllByUser(UserDTO userDTO);
 
 
 

@@ -12,6 +12,5 @@ public record TaskDTO(Long id,
                       TaskPriority priority,
                       LocalDateTime createdAt,
                       LocalDateTime updatedAt,
-                      LocalDateTime finishedAt,
-                      String userId) {
+                      LocalDateTime finishedAt) {
 }

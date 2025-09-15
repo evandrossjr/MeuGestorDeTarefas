@@ -13,6 +13,7 @@ import com.essjr.MeuGestorDeTarefas.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -32,12 +33,13 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskDTO createTask(TaskDTO taskDTO, UserDTO userDTO) {
 
-        User user = userRepository.findById(Long.valueOf(taskDTO.userId()))
-                .orElseThrow(()-> new ResourceNotFoundException("User not foud with id: " + taskDTO.userId()));
+        User user = userRepository.findById(userDTO.id())
+                .orElseThrow(()-> new ResourceNotFoundException("User not foud with id: " + userDTO.id()));
 
         Task task = TaskMapper.toEntity(taskDTO);
 
         task.setUser(user);
+        task.setStatus(TaskStatus.TO_DO);
 
         Task savedTask = taskRepository.save(task);
 
@@ -58,12 +60,25 @@ public class TaskServiceImpl implements TaskService{
         return Optional.of(TaskMapper.toDTO(task));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<TaskDTO> findAllByUser(UserDTO userDTO) {
+        List<Task> tasks = taskRepository.findAllByUserId(userDTO.id());
+
+        return tasks.stream()
+                .map(TaskMapper::toDTO)
+                .toList();
+    }
+
     // MÉTODO HELPER PRIVADO PARA VERIFICAÇÃO DE SEGURANÇA
     private Task findTaskByIdAndUser(Long taskId, Long userId) {
         return taskRepository.findById(taskId)
                 .filter(task -> task.getUser().getId().equals(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + taskId));
     }
+
+
+
 
 
     @Transactional

@@ -60,3 +60,58 @@ h1 {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
+/* Estilos para a tabela de tarefas */
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.task-table th, .task-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.task-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Estilos para os "badges" de status */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background-color: #ffeeba;
+    color: #856404;
+}
+
+.status-done {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Estilos para os botões de ação na tabela */
+.btn-action {
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
