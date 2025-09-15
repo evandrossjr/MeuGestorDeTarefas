@@ -1,0 +1,39 @@
+# Arquivo: docker-compose.yml
+
+# Define a versão do Docker Compose que estamos usando. 3.8 é uma versão moderna e estável.
+version: '3.8'
+
+# A seção 'services' é onde definimos os "containers" ou serviços que nossa aplicação precisa.
+services:
+  # 'postgres' é o nome que estamos dando ao nosso serviço de banco de dados.
+  postgres:
+    # A imagem base que o Docker vai usar para criar o container.
+    # Estamos pegando a imagem oficial do PostgreSQL na versão 15.
+    image: postgres:15
+
+    # Um nome amigável para o nosso container, para facilitar a identificação.
+    container_name: gestor-tarefas-db
+
+    # 'environment' é onde definimos as variáveis de ambiente para o container.
+    # Essas são as configurações iniciais do nosso banco de dados.
+    environment:
+      POSTGRES_USER: myuser             # O nome de usuário para o banco.
+      POSTGRES_PASSWORD: mypassword       # A senha para este usuário.
+      POSTGRES_DB: gestor_tarefas     # O nome do banco de dados que será criado na primeira inicialização.
+
+    # 'ports' mapeia uma porta da sua máquina para uma porta dentro do container.
+    # Formato: "porta_na_sua_maquina:porta_dentro_do_container"
+    # Isso permite que nossa aplicação Spring (rodando em 'localhost') se conecte ao banco.
+    ports:
+      - "5432:5432"
+
+    # 'volumes' é a parte mais importante para a persistência dos dados.
+    # Ele cria uma "pasta" gerenciada pelo Docker no seu computador (chamada 'postgres-data')
+    # e a conecta com a pasta onde o PostgreSQL guarda os dados dentro do container.
+    # Resultado: Se você apagar o container, seus dados não serão perdidos.
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+# Aqui apenas declaramos o volume que usamos acima, para que o Docker o gerencie.
+volumes:
+  postgres-data:
