@@ -145,3 +145,7 @@ h1 {
 .task-form button {
     align-self: flex-start; /* Alinha o botão à esquerda */
 }
+
+.btn-finish {
+    background-color: #28a745; /* Um verde para indicar sucesso */
+}

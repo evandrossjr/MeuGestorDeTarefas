@@ -77,9 +77,14 @@
                         A FAZER
                     </span>
                     </td>
-                    <td>
-                        <a href="#" class="btn-action btn-edit">Editar</a>
-                        <a href="#" class="btn-action btn-delete">Excluir</a>
+                    <td class="actions-cell">
+                        <form th:if="${task.status.name() != 'DONE'}" th:action="@{/tasks/{id}/finish(id=${task.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn-action btn-finish">Finalizar</button>
+                        </form>
+
+                        <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn-action btn-delete">Excluir</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

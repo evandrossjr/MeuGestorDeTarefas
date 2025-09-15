@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -57,5 +58,27 @@ public class IndexPageController {
         // O padrão Post-Redirect-Get: após submeter os dados, redireciona
         // o usuário para a página inicial para evitar reenvio do formulário.
         return "redirect:/";
+    }
+
+    @PostMapping("/tasks/{id}/finish")
+    public String finishTask(@PathVariable Long id) {
+        // --- SIMULAÇÃO DE USUÁRIO AUTENTICADO ---
+        UserDTO authenticatedUser = new UserDTO(1L, "Evandro Sacramento", "evandro@email.com", UserRole.REGULAR);
+        // --- FIM DA SIMULAÇÃO ---
+
+        taskService.finishTask(id, authenticatedUser);
+
+        return "redirect:/"; // Redireciona para a página inicial
+    }
+
+    @PostMapping("/tasks/{id}/delete")
+    public String deleteTask(@PathVariable Long id) {
+        // --- SIMULAÇÃO DE USUÁRIO AUTENTICADO ---
+        UserDTO authenticatedUser = new UserDTO(1L, "Evandro Sacramento", "evandro@email.com", UserRole.REGULAR);
+        // --- FIM DA SIMULAÇÃO ---
+
+        taskService.deleteTask(id, authenticatedUser);
+
+        return "redirect:/"; // Redireciona para a página inicial
     }
 }

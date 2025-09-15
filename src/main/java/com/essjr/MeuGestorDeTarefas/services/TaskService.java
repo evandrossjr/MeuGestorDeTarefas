@@ -37,4 +37,11 @@ public interface TaskService {
     TaskDTO updateTask(Long id, TaskDTO taskDTO, UserDTO userDTO);
 
     TaskDTO finishTask(Long id, UserDTO userDTO);
+
+    /**
+     * Deleta uma tarefa pelo seu ID, garantindo que ela pertença ao usuário.
+     * @param id O ID da tarefa a ser deletada.
+     * @param userDTO O usuário que está solicitando a deleção.
+     */
+    void deleteTask(Long id, UserDTO userDTO);
 }

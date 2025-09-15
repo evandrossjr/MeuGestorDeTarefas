@@ -116,5 +116,13 @@ public class TaskServiceImpl implements TaskService{
 
     }
 
+    @Transactional
+    @Override
+    public void deleteTask(Long id, UserDTO userDTO) {
+        Task task = findTaskByIdAndUser(id, userDTO.id());
+
+        taskRepository.delete(task);
+    }
+
 
 }
