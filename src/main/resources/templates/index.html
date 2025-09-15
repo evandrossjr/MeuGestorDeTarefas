@@ -18,6 +18,34 @@
     <main>
         <div class="add-task-form">
             <h2>Adicionar Nova Tarefa</h2>
+
+            <form th:action="@{/add-task}" th:object="${newTask}" method="post" class="task-form">
+
+                <div class="form-group">
+                    <label for="title">Título:</label>
+                    <input type="text" id="title" th:field="*{title}" placeholder="O que precisa ser feito?" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descrição:</label>
+                    <textarea id="description" th:field="*{description}" rows="3" placeholder="Adicione mais detalhes..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">Prioridade:</label>
+                    <select id="priority" th:field="*{priority}">
+                        <option value="">Selecione a prioridade</option>
+                        <option value="LOW">BAIXA</option>
+                        <option value="MEDIUM">MÉDIA</option>
+                        <option value="HIGH">ALTA</option>
+]                       <option value="URGENT">URGENTE</option>
+
+
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">Adicionar Tarefa</button>
+            </form>
         </div>
 
         <hr>

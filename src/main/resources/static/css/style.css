@@ -115,3 +115,33 @@ h1 {
 .btn-delete {
     background-color: #dc3545;
 }
+
+/* Estilos para o formulário de tarefas */
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os elementos do formulário */
+}
+
+.task-form .form-group {
+    margin-bottom: 0;
+}
+
+.task-form label {
+    font-weight: 600;
+}
+
+.task-form input[type="text"],
+.task-form textarea,
+.task-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+    font-size: 16px;
+}
+
+.task-form button {
+    align-self: flex-start; /* Alinha o botão à esquerda */
+}
