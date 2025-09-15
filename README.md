@@ -1,4 +1,3 @@
-
 # Meu Gestor de Tarefas
 
 > Uma aplicação web completa para gerenciamento de tarefas (To-Do List), construída com Java, Spring Boot e as melhores práticas de desenvolvimento, desde o design até o deploy automatizado com CI/CD.
@@ -12,43 +11,38 @@ Este projeto está sendo desenvolvido como um estudo de caso prático para simul
 
 ## 🚀 FUNCIONALIDADES
 
--   [x] **Gerenciamento de Tarefas (CRUD):** Lógica de negócio completa para criar, ler, atualizar e deletar tarefas.
+-   [x] **Gerenciamento de Tarefas (CRUD):** Lógica de negócio completa para criar, ler, atualizar, finalizar e deletar tarefas.
 -   [x] **Modelo de Dados Robusto:** Tarefas com título, descrição, status, prioridade e datas de controle.
 -   [x] **Segurança por Usuário:** Acesso e modificação de tarefas restritos apenas ao usuário proprietário.
+-   [x] **Frontend Interativo Básico:** Interface com Thymeleaf para listar e adicionar tarefas.
 -   [ ] **Autenticação de Usuários:** Sistema de registro e login com Spring Security.
--   [ ] **Frontend Interativo:** Interface construída com Thymeleaf para interação via navegador.
--   [ ] **Pipeline de CI/CD:** Automação de build, teste e deploy contínuo com Azure DevOps e Docker.
+-   [ ] **Pipeline de CI/CD:** Automação de build, teste e deploy contínuo.
 
 ## 🛠️ TECNOLOGIAS UTILIZADAS
 
-A arquitetura deste projeto foi pensada para utilizar um stack moderno e amplamente requisitado no mercado de trabalho:
-
 -   **Backend:**
-    -   Java 17
-    -   Spring Boot 3.x
-    -   Spring Web (API RESTful)
-    -   Spring Data JPA (Persistência de dados)
+    -   Java 21
+    -   Spring Boot 3.5.5
+    -   Spring Web (API RESTful & MVC)
+    -   Spring Data JPA (Persistência)
     -   Spring Security (Autenticação e Autorização)
 -   **Frontend:**
     -   Thymeleaf (Server-Side Rendering)
 -   **Banco de Dados:**
     -   PostgreSQL
 -   **Testes:**
-    -   JUnit 5
-    -   Mockito
-    -   MockMvc
-    -   AssertJ
+    -   JUnit 5, Mockito, MockMvc, AssertJ
 -   **Build & Dependências:**
     -   Apache Maven
--   **DevOps:**
-    -   Git & GitHub (Versionamento de código)
-    -   Docker (Containerização)
-    -   Azure DevOps (CI/CD)
-    -   Render (Plataforma de Deploy)
+-   **Ambiente de Desenvolvimento:**
+    -   Docker & Docker Compose
+-   **Ferramentas de Gestão:**
+    -   Git & GitHub (Versionamento)
+    -   Azure Boards (Project Management)
 
 ## ⚙️ COMO EXECUTAR O PROJETO LOCALMENTE
 
-Siga os passos abaixo para ter uma instância do projeto rodando na sua máquina.
+Siga os passos abaixo para ter uma instância completa do projeto rodando na sua máquina.
 
 ### Pré-requisitos
 Antes de começar, garanta que você tem as seguintes ferramentas instaladas:
@@ -57,33 +51,54 @@ Antes de começar, garanta que você tem as seguintes ferramentas instaladas:
 -   [Git](https://git-scm.com/downloads)
 -   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-### Passo a Passo
+### Arquivos de Configuração
+
+O projeto utiliza os seguintes arquivos para configurar o ambiente local:
+
+-   `docker-compose.yml`: Define e orquestra os serviços do **PostgreSQL** e do **pgAdmin** (ferramenta de gerenciamento do banco via web).
+-   `src/main/resources/application.properties`: Ativa o perfil de desenvolvimento (`dev`).
+-   `src/main/resources/application-dev.properties`: Contém as credenciais e a URL para conectar a aplicação Spring ao container do PostgreSQL.
+-   `src/main/resources/data.sql`: Popula o banco de dados com um usuário padrão na inicialização para facilitar os testes.
+
+### Execução (Passo a Passo)
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    git clone [https://github.com/seu-usuario/MeuGestorDeTarefas.git](https://github.com/seu-usuario/MeuGestorDeTarefas.git)
     ```
 
 2.  **Navegue até a pasta do projeto:**
     ```bash
-    cd seu-repositorio
+    cd MeuGestorDeTarefas
     ```
 
-3.  **Inicie o banco de dados com Docker:**
-    Este projeto utiliza Docker Compose para simplificar a inicialização do banco de dados PostgreSQL.
+3.  **Inicie os serviços com Docker:**
+    Este comando irá iniciar o container do PostgreSQL e do pgAdmin em segundo plano.
     ```bash
-    docker-compose up -d
+    docker compose up -d
     ```
-    *O `-d` faz com que ele rode em segundo plano (detached mode).*
 
 4.  **Execute a aplicação Spring Boot:**
-    Use o Maven para compilar e iniciar a aplicação.
-    ```bash
-    mvn spring-boot:run
-    ```
+    Você pode fazer isso de duas formas:
+    -   **Pela IDE:** Abra o projeto no IntelliJ (ou outra IDE) e execute a classe principal `MeuGestorDeTarefasApplication.java`.
+    -   **Pelo Terminal:** Use o Maven para compilar e iniciar a aplicação.
+        ```bash
+        mvn spring-boot:run
+        ```
 
-5.  **Acesse a aplicação:**
-    Após a inicialização, a aplicação estará disponível em `http://localhost:8080`.
+### Acessando os Serviços
+
+Após a inicialização, os seguintes serviços estarão disponíveis no seu navegador:
+
+-   **Aplicação Principal:**
+    -   URL: `http://localhost:8080`
+    -   Descrição: A interface web da sua lista de tarefas.
+
+-   **pgAdmin (Gerenciador do Banco de Dados):**
+    -   URL: `http://localhost:5050`
+    -   **Login:** `me@example.com`
+    -   **Senha:** `1234567`
+    -   *Observação: Dentro do pgAdmin, você precisará configurar uma nova conexão de servidor usando `pg-docker` como Host e as credenciais do banco para visualizar as tabelas.*
 
 ## ✅ COMO RODAR OS TESTES
 
