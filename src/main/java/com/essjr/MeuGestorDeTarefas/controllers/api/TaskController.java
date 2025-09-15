@@ -1,9 +1,8 @@
-package com.essjr.MeuGestorDeTarefas.controllers;
+package com.essjr.MeuGestorDeTarefas.controllers.api;
 
 import com.essjr.MeuGestorDeTarefas.dtos.TaskDTO;
 import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
 import com.essjr.MeuGestorDeTarefas.exceptions.ResourceNotFoundException;
-import com.essjr.MeuGestorDeTarefas.models.enuns.TaskStatus;
 import com.essjr.MeuGestorDeTarefas.models.enuns.UserRole;
 import com.essjr.MeuGestorDeTarefas.services.TaskService;
 import org.springframework.http.HttpStatus;
