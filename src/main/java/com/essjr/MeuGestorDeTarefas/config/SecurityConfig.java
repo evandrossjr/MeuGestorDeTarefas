@@ -1,5 +1,6 @@
 package com.essjr.MeuGestorDeTarefas.config;
 
+import com.essjr.MeuGestorDeTarefas.services.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,7 +25,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/login", "/register").anonymous()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(jpaUserDetailsService)
@@ -47,6 +48,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
 
-        return http.build();
     }
 }

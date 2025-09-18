@@ -149,3 +149,29 @@ h1 {
 .btn-finish {
     background-color: #28a745; /* Um verde para indicar sucesso */
 }
+
+/* Estilos para o cabeçalho principal */
+.main-header {
+    display: flex;
+    justify-content: space-between; /* Alinha os itens nas extremidades */
+    align-items: center; /* Alinha verticalmente no centro */
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.main-header h1 {
+    margin: 0; /* Remove a margem padrão do h1 */
+    text-align: left;
+}
+
+/* Estilos para o botão de logout */
+.btn-logout {
+    background-color: #e74c3c; /* Vermelho para indicar uma ação de saída/perigo */
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+}

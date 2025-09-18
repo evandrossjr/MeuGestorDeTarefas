@@ -1,0 +1,110 @@
+/* Local: src/main/resources/static/css/auth.css */
+
+body.auth-body {
+    background-color: #34495e; /* Um fundo mais escuro para destaque */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-card h1 {
+    font-family: 'Courier New', Courier, monospace;
+    color: #e74c3c;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+.auth-card .form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.auth-card .form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #555;
+}
+
+.auth-card .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.auth-card .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #27ae60;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-card .btn:hover {
+    background-color: #229954;
+}
+
+.auth-card .switch-form-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.auth-card .switch-form-link a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-card .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+/* Estilos para os usuários de demonstração */
+.demo-users {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.demo-user-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.demo-user-box:hover {
+    background-color: #f9f9f9;
+}
+
+.demo-user-box span {
+    font-family: monospace;
+    color: #555;
+}

@@ -10,8 +10,12 @@
 <body>
 
 <div class="container">
-    <header>
+    <header class="main-header">
         <h1>Minhas Tarefas - <span th:text="${user.name}">Nome do Usuário</span></h1>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-logout">Sair (Logout)</button>
+        </form>
     </header>
 
 
