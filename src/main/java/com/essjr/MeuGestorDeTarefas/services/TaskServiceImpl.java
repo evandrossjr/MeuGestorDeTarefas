@@ -46,7 +46,6 @@ public class TaskServiceImpl implements TaskService{
         return TaskMapper.toDTO(savedTask);
     }
 
-
     @Transactional(readOnly = true)
     @Override
     public Optional<TaskDTO> findTaskById(Long id, UserDTO userDTO) {
@@ -76,10 +75,6 @@ public class TaskServiceImpl implements TaskService{
                 .filter(task -> task.getUser().getId().equals(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + taskId));
     }
-
-
-
-
 
     @Transactional
     @Override
@@ -123,6 +118,5 @@ public class TaskServiceImpl implements TaskService{
 
         taskRepository.delete(task);
     }
-
 
 }
