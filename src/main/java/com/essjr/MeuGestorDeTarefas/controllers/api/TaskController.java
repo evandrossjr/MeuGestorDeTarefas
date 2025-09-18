@@ -3,10 +3,13 @@ package com.essjr.MeuGestorDeTarefas.controllers.api;
 import com.essjr.MeuGestorDeTarefas.dtos.TaskDTO;
 import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
 import com.essjr.MeuGestorDeTarefas.exceptions.ResourceNotFoundException;
+import com.essjr.MeuGestorDeTarefas.mappers.UserMapper;
+import com.essjr.MeuGestorDeTarefas.models.User;
 import com.essjr.MeuGestorDeTarefas.models.enuns.UserRole;
 import com.essjr.MeuGestorDeTarefas.services.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,24 +25,18 @@ public class TaskController {
 
 
     @PostMapping
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO, @AuthenticationPrincipal User user) {
 
-        // --- SIMULAÇÃO ---
-        // Por enquanto, vamos criar um usuário "mockado" para passar para o service.
-        // Quando o Spring Security estiver configurado, pegaremos o usuário real da autenticação.
-        UserDTO authenticatedUser = new UserDTO(1L, "Mock User", "mock@user.com", UserRole.REGULAR);
-        // --- FIM DA SIMULAÇÃO ---
-
+        UserDTO authenticatedUser = UserMapper.toDTO(user);
 
         TaskDTO createdTask = taskService.createTask(taskDTO, authenticatedUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
-        // --- SIMULAÇÃO ---
-        UserDTO authenticatedUser = new UserDTO(1L, "Mock User", "mock@user.com", UserRole.REGULAR);
-        // --- FIM DA SIMULAÇÃO ---}
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id,@AuthenticationPrincipal User user) {
+        UserDTO authenticatedUser = UserMapper.toDTO(user);
+
 
         // O findTaskById retorna um Optional. Usamos .map() e .orElseThrow() para lidar com isso.
         return taskService.findTaskById(id, authenticatedUser)
@@ -48,10 +45,8 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
-        // --- SIMULAÇÃO ---
-        UserDTO authenticatedUser = new UserDTO(1L, "Mock User", "mock@user.com", UserRole.REGULAR);
-        // --- FIM DA SIMULAÇÃO ---
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO, @AuthenticationPrincipal User user) {
+        UserDTO authenticatedUser = UserMapper.toDTO(user);
 
         TaskDTO updatedTask = taskService.updateTask(id, taskDTO, authenticatedUser);
         return ResponseEntity.ok(updatedTask); // Retorna 200 OK com a tarefa atualizada
@@ -59,10 +54,8 @@ public class TaskController {
 
     // Endpoint para FINALIZAR uma tarefa
     @PatchMapping("/{id}/finish")
-    public ResponseEntity<TaskDTO> finishTask(@PathVariable Long id) {
-        // --- SIMULAÇÃO ---
-        UserDTO authenticatedUser = new UserDTO(1L, "Mock User", "mock@user.com", UserRole.REGULAR);
-        // --- FIM DA SIMULAÇÃO ---
+    public ResponseEntity<TaskDTO> finishTask(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        UserDTO authenticatedUser = UserMapper.toDTO(user);
 
         TaskDTO finishedTask = taskService.finishTask(id, authenticatedUser);
         return ResponseEntity.ok(finishedTask); // Retorna 200 OK com a tarefa finalizada
