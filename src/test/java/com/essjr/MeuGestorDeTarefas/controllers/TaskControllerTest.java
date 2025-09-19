@@ -44,7 +44,7 @@ class TaskControllerTest {
     @BeforeEach
     void setUp() {
         userDTO = new UserDTO(1L, "Test User", "test@user.com", UserRole.REGULAR);
-        taskDTO = new TaskDTO(10L, "Test API", "Description", TaskStatus.TO_DO, TaskPriority.HIGH, null, null, null, "1");
+        taskDTO = new TaskDTO(10L, "Test API", "Description", TaskStatus.TO_DO, TaskPriority.HIGH, null, null, null);
     }
 
     @Test
@@ -52,7 +52,7 @@ class TaskControllerTest {
     void createTask_withValidData_shouldReturnCreated() throws Exception {
         // Cenário (Given)
         // DTO que será enviado no corpo da requisição POST
-        TaskDTO requestDTO = new TaskDTO(null, "New Task", "New Desc", TaskStatus.TO_DO, TaskPriority.MEDIUM, null, null, null, "1");
+        TaskDTO requestDTO = new TaskDTO(null, "New Task", "New Desc", TaskStatus.TO_DO, TaskPriority.MEDIUM, null, null, null);
 
         // Quando o taskService.createTask for chamado, retorne nossa taskDTO de teste.
         when(taskService.createTask(any(TaskDTO.class), any(UserDTO.class))).thenReturn(taskDTO);
@@ -85,8 +85,8 @@ class TaskControllerTest {
     void updateTask_withValidData_shouldReturnOk() throws Exception {
         // Cenário (Given)
         Long taskId = 10L;
-        TaskDTO updateRequest = new TaskDTO(null, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null, null);
-        TaskDTO updatedTaskDTO = new TaskDTO(taskId, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null, "1");
+        TaskDTO updateRequest = new TaskDTO(null, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null);
+        TaskDTO updatedTaskDTO = new TaskDTO(taskId, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null);
 
         // Quando o serviço de atualização for chamado, retorne o DTO atualizado.
         when(taskService.updateTask(eq(taskId), any(TaskDTO.class), any(UserDTO.class))).thenReturn(updatedTaskDTO);
@@ -106,7 +106,7 @@ class TaskControllerTest {
         // Cenário (Given)
         Long taskId = 10L;
         // O DTO retornado pelo serviço terá o status DONE e uma data de finalização.
-        TaskDTO finishedTaskDTO = new TaskDTO(taskId, "Test API", "Description", TaskStatus.DONE, TaskPriority.HIGH, null, null, java.time.LocalDateTime.now(), "1");
+        TaskDTO finishedTaskDTO = new TaskDTO(taskId, "Test API", "Description", TaskStatus.DONE, TaskPriority.HIGH, null, null, java.time.LocalDateTime.now());
 
         when(taskService.finishTask(eq(taskId), any(UserDTO.class))).thenReturn(finishedTaskDTO);
 

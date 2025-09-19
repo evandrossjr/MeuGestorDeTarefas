@@ -69,8 +69,7 @@ public class TaskServiceTest {
                 TaskPriority.HIGH, // priority
                 null, // createdAt (o serviço vai preencher isso)
                 null, // updatedAt (o serviço vai preencher isso)
-                null, // finishedAt (o serviço vai preencher isso)
-                "1" // userId
+                null // finishedAt (o serviço vai preencher isso)
         );
     }
 
@@ -154,8 +153,7 @@ public class TaskServiceTest {
                 "Descrição Atualizada",
                 TaskStatus.DOING,
                 TaskPriority.MEDIUM,
-                null, null, null,
-                user.getId().toString()
+                null, null, null
         );
 
         // Quando o repositório buscar a tarefa, encontre-a.
@@ -180,7 +178,7 @@ public class TaskServiceTest {
     void updateTask_whenUserIsNotOwner_shouldThrowException() {
         // Cenário (Given)
         UserDTO anotherUserDTO = new UserDTO(99L, "Usuário Intruso", "intruso@email.com", UserRole.REGULAR);
-        TaskDTO updateRequestDTO = new TaskDTO(null, "Título Malicioso", null, null, null, null, null, null, null);
+        TaskDTO updateRequestDTO = new TaskDTO(null, "Título Malicioso", null, null, null, null, null, null);
 
         // O repositório encontra a tarefa, que pertence ao 'user' de ID 1.
         when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));

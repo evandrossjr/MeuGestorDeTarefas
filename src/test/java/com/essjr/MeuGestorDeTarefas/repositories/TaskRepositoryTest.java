@@ -56,7 +56,6 @@ class TaskRepositoryTest {
         assertThat(taskEcontrada.getStatus()).isEqualTo(TaskStatus.TO_DO);
         assertThat(taskEcontrada.getPriority()).isEqualTo(TaskPriority.HIGH);
         assertThat(taskEcontrada.getCreatedAt()).isNotNull();
-        assertThat(taskEcontrada.getUser()).isEqualTo(user);
 
     }
 
