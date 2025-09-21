@@ -15,7 +15,7 @@ Este projeto está sendo desenvolvido como um estudo de caso prático para simul
 -   [x] **Modelo de Dados Robusto:** Tarefas com título, descrição, status, prioridade e datas de controle.
 -   [x] **Segurança por Usuário:** Acesso e modificação de tarefas restritos apenas ao usuário proprietário.
 -   [x] **Frontend Interativo Básico:** Interface com Thymeleaf para listar e adicionar tarefas.
--   [ ] **Autenticação de Usuários:** Sistema de registro e login com Spring Security.
+-   [x] **Autenticação de Usuários:** Sistema de registro e login com Spring Security.
 -   [ ] **Pipeline de CI/CD:** Automação de build, teste e deploy contínuo.
 
 ## 🛠️ TECNOLOGIAS UTILIZADAS
