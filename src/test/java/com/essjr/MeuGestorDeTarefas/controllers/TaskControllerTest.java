@@ -4,6 +4,7 @@ import com.essjr.MeuGestorDeTarefas.config.SecurityConfig;
 import com.essjr.MeuGestorDeTarefas.controllers.api.TaskController;
 import com.essjr.MeuGestorDeTarefas.dtos.TaskDTO;
 import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
+import com.essjr.MeuGestorDeTarefas.models.User;
 import com.essjr.MeuGestorDeTarefas.models.enuns.TaskPriority;
 import com.essjr.MeuGestorDeTarefas.models.enuns.TaskStatus;
 import com.essjr.MeuGestorDeTarefas.models.enuns.UserRole;
@@ -47,6 +48,7 @@ class TaskControllerTest {
     private JpaUserDetailsService jpaUserDetailsService; // Mock the dependency needed by SecurityConfig
 
 
+    private User user;
     private TaskDTO taskDTO;
     private UserDTO userDTO;
 

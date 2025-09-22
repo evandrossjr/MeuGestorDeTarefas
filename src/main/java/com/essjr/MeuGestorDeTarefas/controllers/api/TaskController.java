@@ -49,7 +49,7 @@ public class TaskController {
         UserDTO authenticatedUser = UserMapper.toDTO(user);
 
         TaskDTO updatedTask = taskService.updateTask(id, taskDTO, authenticatedUser);
-        return ResponseEntity.ok(updatedTask); // Retorna 200 OK com a tarefa atualizada
+        return ResponseEntity.status(HttpStatus.OK).body(updatedTask); // Retorna 200 OK com a tarefa atualizada
     }
 
     // Endpoint para FINALIZAR uma tarefa
@@ -58,7 +58,7 @@ public class TaskController {
         UserDTO authenticatedUser = UserMapper.toDTO(user);
 
         TaskDTO finishedTask = taskService.finishTask(id, authenticatedUser);
-        return ResponseEntity.ok(finishedTask); // Retorna 200 OK com a tarefa finalizada
+        return ResponseEntity.status(HttpStatus.OK).body(finishedTask); // Retorna 200 OK com a tarefa finalizada
     }
 
 
