@@ -34,8 +34,8 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id,@AuthenticationPrincipal User user) {
-        UserDTO authenticatedUser = UserMapper.toDTO(user);
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id,@AuthenticationPrincipal(expression = "username") String username) {
+        UserDTO authenticatedUser = new UserDTO(1L, username, username, UserRole.REGULAR);
 
 
         // O findTaskById retorna um Optional. Usamos .map() e .orElseThrow() para lidar com isso.
@@ -45,8 +45,8 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO, @AuthenticationPrincipal User user) {
-        UserDTO authenticatedUser = UserMapper.toDTO(user);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO, @AuthenticationPrincipal(expression = "username") String username) {
+        UserDTO authenticatedUser = new UserDTO(1L, username, username, UserRole.REGULAR);
 
         TaskDTO updatedTask = taskService.updateTask(id, taskDTO, authenticatedUser);
         return ResponseEntity.status(HttpStatus.OK).body(updatedTask); // Retorna 200 OK com a tarefa atualizada
@@ -54,8 +54,8 @@ public class TaskController {
 
     // Endpoint para FINALIZAR uma tarefa
     @PatchMapping("/{id}/finish")
-    public ResponseEntity<TaskDTO> finishTask(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        UserDTO authenticatedUser = UserMapper.toDTO(user);
+    public ResponseEntity<TaskDTO> finishTask(@PathVariable Long id, @AuthenticationPrincipal(expression = "username") String username) {
+        UserDTO authenticatedUser = new UserDTO(1L, username, username, UserRole.REGULAR);
 
         TaskDTO finishedTask = taskService.finishTask(id, authenticatedUser);
         return ResponseEntity.status(HttpStatus.OK).body(finishedTask); // Retorna 200 OK com a tarefa finalizada
