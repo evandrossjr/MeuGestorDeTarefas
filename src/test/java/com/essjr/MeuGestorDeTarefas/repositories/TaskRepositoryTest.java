@@ -4,6 +4,7 @@ import com.essjr.MeuGestorDeTarefas.models.Task;
 import com.essjr.MeuGestorDeTarefas.models.User;
 import com.essjr.MeuGestorDeTarefas.models.enuns.TaskPriority;
 import com.essjr.MeuGestorDeTarefas.models.enuns.TaskStatus;
+import com.essjr.MeuGestorDeTarefas.models.enuns.UserRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ class TaskRepositoryTest {
         user.setName("Usuário Teste");
         user.setEmail("teste@email.com");
         user.setPasswordHash("hash123");
+        user.setRole(UserRole.REGULAR);
         testEntityManager.persist(user);
 
         Task task = new Task();

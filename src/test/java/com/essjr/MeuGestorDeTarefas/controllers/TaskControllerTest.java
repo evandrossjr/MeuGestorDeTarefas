@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
@@ -49,6 +50,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve criar uma tarefa e retornar status 201 Created")
+    @WithMockUser
     void createTask_withValidData_shouldReturnCreated() throws Exception {
         // Cenário (Given)
         // DTO que será enviado no corpo da requisição POST
@@ -68,6 +70,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve buscar uma tarefa pelo ID e retornar status 200 OK")
+    @WithMockUser
     void findTaskById_whenTaskExists_shouldReturnOk() throws Exception {
         // Cenário (Given)
         // Quando o taskService.findTaskById for chamado com ID 10 e nosso usuário, retorne a taskDTO.
@@ -82,6 +85,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve atualizar uma tarefa e retornar status 200 OK")
+    @WithMockUser
     void updateTask_withValidData_shouldReturnOk() throws Exception {
         // Cenário (Given)
         Long taskId = 10L;
@@ -102,6 +106,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve finalizar uma tarefa e retornar status 200 OK")
+    @WithMockUser
     void finishTask_whenTaskExists_shouldReturnOk() throws Exception {
         // Cenário (Given)
         Long taskId = 10L;
