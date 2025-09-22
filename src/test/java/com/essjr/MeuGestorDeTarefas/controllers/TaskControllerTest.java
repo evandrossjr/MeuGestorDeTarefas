@@ -1,5 +1,6 @@
 package com.essjr.MeuGestorDeTarefas.controllers;
 
+import com.essjr.MeuGestorDeTarefas.config.SecurityConfig;
 import com.essjr.MeuGestorDeTarefas.controllers.api.TaskController;
 import com.essjr.MeuGestorDeTarefas.dtos.TaskDTO;
 import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TaskController.class) // 1. Diz ao Spring para testar APENAS o TaskController
+@Import(SecurityConfig.class) // Garante que as nossas regras de segurança são carregadas
 class TaskControllerTest {
 
     @Autowired
@@ -50,8 +53,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve criar uma tarefa e retornar status 201 Created")
-    @WithMockUser
-    void createTask_withValidData_shouldReturnCreated() throws Exception {
+    @WithMockUser(username = "user@test.com", roles = {"REGULAR"})    void createTask_withValidData_shouldReturnCreated() throws Exception {
         // Cenário (Given)
         // DTO que será enviado no corpo da requisição POST
         TaskDTO requestDTO = new TaskDTO(null, "New Task", "New Desc", TaskStatus.TO_DO, TaskPriority.MEDIUM, null, null, null);
@@ -70,8 +72,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve buscar uma tarefa pelo ID e retornar status 200 OK")
-    @WithMockUser
-    void findTaskById_whenTaskExists_shouldReturnOk() throws Exception {
+    @WithMockUser(username = "user@test.com", roles = {"REGULAR"})    void findTaskById_whenTaskExists_shouldReturnOk() throws Exception {
         // Cenário (Given)
         // Quando o taskService.findTaskById for chamado com ID 10 e nosso usuário, retorne a taskDTO.
         when(taskService.findTaskById(eq(10L), any(UserDTO.class))).thenReturn(Optional.of(taskDTO));
@@ -85,8 +86,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve atualizar uma tarefa e retornar status 200 OK")
-    @WithMockUser
-    void updateTask_withValidData_shouldReturnOk() throws Exception {
+    @WithMockUser(username = "user@test.com", roles = {"REGULAR"})    void updateTask_withValidData_shouldReturnOk() throws Exception {
         // Cenário (Given)
         Long taskId = 10L;
         TaskDTO updateRequest = new TaskDTO(null, "Título Atualizado", "Descrição Atualizada", TaskStatus.DOING, TaskPriority.MEDIUM, null, null, null);
@@ -106,8 +106,7 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Deve finalizar uma tarefa e retornar status 200 OK")
-    @WithMockUser
-    void finishTask_whenTaskExists_shouldReturnOk() throws Exception {
+    @WithMockUser(username = "user@test.com", roles = {"REGULAR"})    void finishTask_whenTaskExists_shouldReturnOk() throws Exception {
         // Cenário (Given)
         Long taskId = 10L;
         // O DTO retornado pelo serviço terá o status DONE e uma data de finalização.
