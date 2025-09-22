@@ -7,6 +7,7 @@ import com.essjr.MeuGestorDeTarefas.dtos.UserDTO;
 import com.essjr.MeuGestorDeTarefas.models.enuns.TaskPriority;
 import com.essjr.MeuGestorDeTarefas.models.enuns.TaskStatus;
 import com.essjr.MeuGestorDeTarefas.models.enuns.UserRole;
+import com.essjr.MeuGestorDeTarefas.services.JpaUserDetailsService;
 import com.essjr.MeuGestorDeTarefas.services.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,11 @@ class TaskControllerTest {
     private TaskService taskService;
 
     @Autowired
-    private ObjectMapper objectMapper; // 4. Helper para converter objetos Java em JSON
+    private ObjectMapper objectMapper; // 4. Helper para converter objetos Java em JSON[
+
+    @MockBean
+    private JpaUserDetailsService jpaUserDetailsService; // Mock the dependency needed by SecurityConfig
+
 
     private TaskDTO taskDTO;
     private UserDTO userDTO;
