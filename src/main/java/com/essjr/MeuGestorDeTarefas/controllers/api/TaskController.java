@@ -13,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/tasks")
+@RequestMapping("/api/tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -25,9 +25,9 @@ public class TaskController {
 
 
     @PostMapping
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO, @AuthenticationPrincipal User user) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO, @AuthenticationPrincipal(expression = "username") String username) {
 
-        UserDTO authenticatedUser = UserMapper.toDTO(user);
+        UserDTO authenticatedUser = new UserDTO(1L, username, username, UserRole.REGULAR);
 
         TaskDTO createdTask = taskService.createTask(taskDTO, authenticatedUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
