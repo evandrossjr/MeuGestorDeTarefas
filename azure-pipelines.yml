@@ -1,56 +1,39 @@
-# Arquivo: azure-pipelines.yml
+# Arquivo: azure-pipelines.yml (Versão Final com CI + CD)
 
-# 1. GATILHO (TRIGGER)
-# Esta seção define quando o pipeline deve ser executado automaticamente.
-# Aqui, ele será acionado a cada novo commit ou merge na branch 'main'.
 trigger:
   - main
 
-# 2. AMBIENTE DE EXECUÇÃO (POOL)
-# Define o tipo de máquina virtual que o Azure vai usar para rodar nosso pipeline.
-# 'ubuntu-latest' é uma máquina Linux moderna, perfeita para builds Java/Docker.
 pool:
   vmImage: 'ubuntu-latest'
 
-# 3. ETAPAS DO PIPELINE (STAGES)
-# Um pipeline é dividido em estágios. Para um CI simples, teremos um único estágio de "Build".
 stages:
+  # ======================================================================
+  # ESTÁGIO 1: BUILD (CI - Integração Contínua)
+  # Este estágio compila, testa e publica os artefactos.
+  # ======================================================================
   - stage: Build
     displayName: 'Build and Test Stage'
     jobs:
       - job: Build
         displayName: 'Build, test, and publish artifacts'
         steps:
-
-          # PASSO 1: Configurar a versão correta do Java (JDK)
-          # Garante que a máquina virtual use a mesma versão Java do nosso projeto.
           - task: JavaToolInstaller@0
             inputs:
-              versionSpec: '21' # A versão do nosso projeto
+              versionSpec: '21'
               jdkArchitectureOption: 'x64'
-              jdkSourceOption: 'Temurin' # Usando a distribuição Temurin (antiga AdoptOpenJDK)
+              jdkSourceOption: 'Temurin'
 
-          # PASSO 2: Executar o Build com Maven
-          # Este é o passo principal. Ele compila o código, RODA OS TESTES e empacota a aplicação.
           - task: Maven@4
             displayName: 'Build with Maven'
             inputs:
               mavenPomFile: 'pom.xml'
-              goals: 'clean package' # Executa os comandos 'mvn clean package'
-              options: '-Djava.awt.headless=true'
-              publishJUnitTestResults: true # Publica os resultados dos testes para visualização no Azure DevOps
+              goals: 'clean package'
+              publishJUnitTestResults: true
               testResultsFiles: '**/surefire-reports/TEST-*.xml'
               javaHomeOption: 'JDKVersion'
-              jdkVersionOption: '1.21' # Garante que o Maven use o JDK que instalamos acima
-              mavenVersionOption: 'Default'
-              mavenAuthenticateFeed: false
-              effectivePomSkip: false
-              sonarQubeRunAnalysis: false
-              # Habilita o cache de dependências do Maven para builds futuros serem mais rápidos
+              jdkVersionOption: '1.21'
               cache: 'maven'
 
-          # PASSO 3: Copiar os Arquivos para o Artefato
-          # Preparamos os arquivos que serão "publicados" (salvos) pelo pipeline.
           - task: CopyFiles@2
             displayName: 'Copy Files to Artifact Staging Directory'
             inputs:
@@ -58,14 +41,50 @@ stages:
               Contents: |
                 target/*.jar
                 Dockerfile
-                docker-compose.yml
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-          # PASSO 4: Publicar os Artefatos do Build
-          # Salva o resultado do nosso build para que a próxima fase (o Deploy Contínuo) possa usá-lo.
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifact: drop'
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop' # O nome do nosso "pacote" de artefatos
+              ArtifactName: 'drop'
               publishLocation: 'Container'
+
+  # ======================================================================
+  # ESTÁGIO 2: DEPLOY (CD - Deploy Contínuo)
+  # O estágio 2 só roda se o estágio de Build for bem-sucedido.
+  # ======================================================================
+  - stage: Deploy
+    displayName: 'Deploy to Render Stage'
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: Deploy
+        displayName: 'Deploy to Render'
+        steps:
+          - download: current
+            artifact: drop
+
+          - task: Docker@2
+            displayName: 'Login to Docker Hub'
+            inputs:
+              containerRegistry: 'DockerHubConnection'
+              command: 'login'
+
+          - task: Docker@2
+            displayName: 'Build and Push image to Docker Hub'
+            inputs:
+              command: 'buildAndPush'
+              repository: '$(DOCKERHUB_USERNAME)/meu-gestor-de-tarefas'
+              dockerfile: '$(Pipeline.Workspace)/drop/Dockerfile'
+              tags: |
+                $(Build.BuildId)
+                latest
+
+          - task: Bash@3
+            displayName: 'Trigger Render Deploy Hook'
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "Triggering Render deployment..."
+                curl -X POST "$(RENDER_DEPLOY_HOOK_URL)"
