@@ -1,8 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Meu Gestor de Tarefas</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+
 <body class="auth-body" xmlns:th="http://www.w3.org/1999/xhtml">
 <div class="auth-card">
     <h1>CRIE SUA CONTA</h1>
 
-    <form th:action="@{/register}" th-object="${user}" method="post">
+    <form th:action="@{/register}" th:object="${user}" method="post">
         <div class="form-group">
             <label for="name">Nome Completo</label>
             <input type="text" id="name" th:field="*{name}" required>
